@@ -22,6 +22,12 @@ def load_orders(filename=FILENAME):
 
     return orders
 
+def save_orders(orders, filename=FILENAME):
+    """Saves all individual orders to the file."""
+    with open(filename, "w") as file:
+        for order in orders:
+            file.write(f"{order['id']},{order['name']},{order['quantity']}\n")
+
 
 def display_orders(orders):
     #Displays current orders loaded from the file.

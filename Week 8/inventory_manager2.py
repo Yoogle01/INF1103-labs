@@ -1,5 +1,6 @@
 import json
 import os
+FILENAME = "inventory.json"
 
 class Product:
     def __init__(self, product_id, name,price, stock ):
@@ -20,22 +21,10 @@ class Product:
             
     def get_stock(self):
         return self.__stock 
-    """ #set methods    
-    def set_product_id(self, product_id):
-        self.__product_id = product_id
-        
-    def set_name(self, name):
-        self.__name = name    
-        
-    def set_price(self, price):
-       self.__price = price
-       
-    def set_stock(self, stock):
-        self.__stock = stock         """
         
     #update stock        
     def update_stock(self, new_stock):
-        self.stock = new_stock
+        self.__stock = new_stock
     
         
     def to_dict(self):
@@ -61,7 +50,7 @@ class Inventory:
         
     def search_product(self, product_id):
         for item in self.__items:
-            if item.get_id().lower() == product_id.lower():
+            if item.get_product_id().lower() == product_id.lower():
                 return item
         return None   
     
@@ -102,129 +91,12 @@ def save_inventory_data(inventory, filename=FILENAME):
     with open(filename, "w") as file:
         json.dump(data, file, indent=4)
     print(f"Inventory saved successfully to {filename}.") 
-        
+    
+print("=" *  46)
+print("Inventory Management System")
+print("=" * 46)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-""" import json
-import os
-
-FILENAME = "inventory.json"
-
-
-def load_inventory(filename=FILENAME):
-    if os.path.exists(filename):
-        try:
-            with open(filename, "r") as file:
-                inventory = json.load(file)
-                print("inventory.json found.")
-                print("Inventory loaded successfully.")
-                return inventory
-        except (json.JSONDecodeError, OSError):
-            pass
-
-    # Default starter data if file doesn't exist yet
-    return [
-        {"id": "P001", "name": "Laptop", "price": 1200.00, "stock": 15},
-        {"id": "P002", "name": "Mouse", "price": 25.50, "stock": 40},
-        {"id": "P003", "name": "Keyboard", "price": 45.00, "stock": 25},
-    ]
-
-
-def save_inventory(inventory, filename=FILENAME):
-    print("Saving inventory...")
-    with open(filename, "w") as file:
-        json.dump(inventory, file, indent=4)
-    print(f"Inventory saved successfully to {filename}.")
-
-
-def display_all(inventory):
-    print("\nCurrent Inventory")
-    print("-" * 46)
-    for item in inventory:
-        print(
-            f"ID: {item['id']} | Name: {item['name']} | Price: ${item['price']:.2f} | Stock: {item['stock']}"
-        )
-    print("-" * 46)
-
-
-def add_product(inventory):
-    print("\nAdd New Product")
-    prod_id = input("Product ID: ").strip()
-    name = input("Product Name: ").strip()
-    price = float(input("Price: ").strip())
-    stock = int(input("Stock Quantity: ").strip())
-
-    new_product = {"id": prod_id, "name": name, "price": price, "stock": stock}
-    inventory.append(new_product)
-    print("\nProduct added successfully!")
-
-
-def update_stock(inventory):
-    print("\nUpdate Stock")
-    prod_id = input("Enter Product ID: ").strip()
-
-    target = None
-    for item in inventory:
-        if item["id"].lower() == prod_id.lower():
-            target = item
-            break
-
-    if target:
-        print("\nProduct Found:")
-        print(f"Name: {target['name']}")
-        print(f"Current Stock: {target['stock']}\n")
-        new_stock = int(input("New Stock Quantity: ").strip())
-        target["stock"] = new_stock
-        print("\nStock updated successfully!")
-    else:
-        print("\nProduct not found.")
-
-
-def search_product(inventory):
-    print("\nSearch Product")
-    prod_id = input("Enter Product ID: ").strip()
-
-    target = None
-    for item in inventory:
-        if item["id"].lower() == prod_id.lower():
-            target = item
-            break
-
-    if target:
-        print("\nProduct Found")
-        print("-" * 46)
-        print(f"ID: {target['id']}")
-        print(f"Name: {target['name']}")
-        print(f"Price: ${target['price']:.2f}")
-        print(f"Stock: {target['stock']}")
-        print("-" * 46)
-    else:
-        print("\nProduct not found.")
-
-
-# --- Startup and Menu Execution ---
-print("==================================================")
-print("INVENTORY MANAGEMENT SYSTEM")
-print("==================================================\n")
-
-inventory = load_inventory()
+inventory = load_inventory_data(FILENAME)
 
 while True:
     print("\n--------- MENU ---------")
@@ -235,26 +107,61 @@ while True:
     print("5. Save Inventory")
     print("6. Exit")
     print("------------------------\n")
+    
+    choice = input("Enter option: ")
+    
+    if choice == "1":
+        inventory.display_products()
+        
+    elif choice == "2":
+        print("\nAdd New Product")
+        p_id = input("Product ID: ")  
+        name = input("Name: ")
+        price = input("Price: ")
+        stock= input("Stock: ")
+          
+        new_product = Product(p_id, name, price, stock)
+        inventory.add_products(new_product)
+        print("\nProduct added sucessfully!")
+          
+    elif choice == "3":
+        p_id = input("Product ID: ")
+        target = inventory.search_product(p_id)
+        
+        if target:
+            print("\nProduct found")
+            print(f"Name: {target.get_name()}") 
+            print(f"Current Stock: {target.get_stock()}")
+            
+            new_stock = int(input("New Stock Quantity: "))
+            target.update_stock(new_stock)
+            print("Stock updated successfully!")
+            
+    elif choice == "4":
+        print("\nSearch Product")
+        p_id = input("Enter Product ID: ").strip()
+        target = inventory.search_product(p_id)
 
-    option = input("Enter option: ").strip()
+        if target:
+            print("\nProduct Found")
+            print("-" * 46)
+            print(f"ID: {target.get_product_id()}")
+            print(f"Name: {target.get_name()}")
+            print(f"Price: ${target.get_price():.2f}")
+            print(f"Stock: {target.get_stock()}")
+            print("-" * 46)
+        else:
+            print("\nProduct not found.")
 
-    if option == "1":
-        display_all(inventory)
-    elif option == "2":
-        add_product(inventory)
-    elif option == "3":
-        update_stock(inventory)
-    elif option == "4":
-        search_product(inventory)
-    elif option == "5":
-        save_inventory(inventory)
-    elif option == "6":
+    elif choice == "5":
+        save_inventory_data(inventory, FILENAME)
+
+    elif choice == "6":
         print("\nSaving inventory before exit...")
-        with open(FILENAME, "w") as file:
-            json.dump(inventory, file, indent=4)
-        print("Inventory saved successfully.\n")
+        save_inventory_data(inventory, FILENAME)
         print("Thank you for using Inventory Management System.")
         print("Program terminated.")
         break
+
     else:
-        print("Invalid option. Please try again.") """
+        print("Invalid option. Please try again.")       

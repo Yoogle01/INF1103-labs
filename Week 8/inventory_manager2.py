@@ -1,26 +1,82 @@
+import json
+import os
+
 class Product:
     def __init__(self, product_id, name,stock, price ):
         self.__product_id = product_id
         self.__name = name
-        self.price = price
-        self.stock = stock
-
+        self.__price = price
+        self.__stock = stock
+        
+    #get methods
     def get_product_id(self):
         return self.__product_id
     
     def get_name(self):
         return self.__name
     
+    def get_price(self):
+        return self.__price
+            
+    def get_stock(self):
+        return self.__stock 
+    """ #set methods    
     def set_product_id(self, product_id):
         self.__product_id = product_id
         
     def set_name(self, name):
         self.__name = name    
         
+    def set_price(self, price):
+       self.__price = price
+       
+    def set_stock(self, stock):
+        self.__stock = stock         """
+        
+    #update stock        
     def update_stock(self, new_stock):
         self.stock = new_stock
+    
         
-    def     
+    def to_dict(self):
+        return {
+            "product_id" : self.__product_id,
+            "name": self.__name,
+            "price": self.__price,
+            "stock" : self.__stock
+        }   
+        
+    def __str__ (self):
+        return  f"Product_id: {self.__product_id} | Name: {self.__name} | Price: {self.__price} | Stock: {self.__stock}"
+    
+class Inventory:
+    def __init__(self):
+        self.__items = []  
+        
+    def get_items(self):
+        return self.__items
+        
+    def add_products(self, product):
+        self.__items.append(product)      
+        
+    def search_product(self, product_id):
+        for item in self.__items:
+            if item.get_id().lower() == product_id.lower():
+                return item
+        return None   
+    
+    def display_products(self):
+        print("\nCurrent Inventory")
+        print("-" * 46)
+        if not self.__items:
+            print("Inventory is empty.")
+        else:
+            for item in self.__items:
+                print(item)
+        print("-" * 46)    
+        
+        
+          
     
         
 

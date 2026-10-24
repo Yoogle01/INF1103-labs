@@ -2,7 +2,7 @@ import json
 import os
 
 class Product:
-    def __init__(self, product_id, name,stock, price ):
+    def __init__(self, product_id, name,price, stock ):
         self.__product_id = product_id
         self.__name = name
         self.__price = price
@@ -75,9 +75,33 @@ class Inventory:
                 print(item)
         print("-" * 46)    
         
-        
+def load_inventory_data(filename=FILENAME):
+    inv = Inventory()
+
+    if os.path.exists(filename):
+        try:
+            with open(filename, "r") as file:
+                data = json.load(file)
+                for item in data:
+                    new_prod = Product(item["id"], item["name"], item["price"], item["stock"])
+                    inv.add_products(new_prod)
+            print("inventory.json found.")
+            print("Inventory loaded successfully.")
+            return inv
+        except (json.JSONDecodeError, OSError):
+            pass        
           
-    
+    inv.add_products(Product("P1001", "laptop", 1200.00, 15 ))
+    inv.add_products(Product("P002", "Mouse", 25.50, 40))
+    inv.add_products(Product("P003", "Keyboard", 45.00, 25))
+    return inv    
+   
+def save_inventory_data(inventory, filename=FILENAME):
+    print("Saving inventory...")
+    data = [item.to_dict() for item in inventory.get_items()]
+    with open(filename, "w") as file:
+        json.dump(data, file, indent=4)
+    print(f"Inventory saved successfully to {filename}.") 
         
 
 

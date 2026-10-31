@@ -47,12 +47,12 @@ class Product(ABC):
         return self.display_information()
 
 class physicalProduct(Product, CanBeShipped):
-    def __init__(self, weight, product_id, name, price, stock):
+    def __init__(self, product_id, name, price, stock, weight):
         super().__init__(product_id, name, price, stock)
         self.weight = weight
         
-    def get_fulfilment_info():
-        print("Product requires physical shipping")   
+    def get_fulfilment_info(self):
+        return f"Product requires physical shipping"  
     
     def calculate_shipping_cost(self):
         base_fee = 5.00
@@ -74,12 +74,12 @@ class physicalProduct(Product, CanBeShipped):
         return  f"{product_info} | weight: {self.weight}"
         
 class digitalProduct(Product):
-    def __init__(self, download_size, product_id, name, price, stock):
-        super().__init__(download_size, product_id, name, price, stock)
+    def __init__(self, product_id, name, price, stock, download_size):
+        super().__init__(product_id, name, price, stock)
         self.download_size = download_size
     
-    def get_fulfilment_info():
-        print("Product is delivered digitally")    
+    def get_fulfilment_info(self):
+        return f"Product is delivered digitally"    
     
     def to_dict(self):
         return {
@@ -122,7 +122,7 @@ class Inventory:
                 print(item)
                 print(f"Fulfilment: {item.get_fulfilment_info()}")
                 if isinstance(item, CanBeShipped):
-                    print(f"Shipping Cost: ${item.calculate_shipping_cost():.2f}")
+                    print(f"Shipping Cost: ${item.calculate_shipping_cost()}")
                 print("-" * 55)
         
 def load_inventory(filename=FILENAME):
@@ -141,10 +141,10 @@ def load_inventory(filename=FILENAME):
                     
                     if prod_type == "physical":
                         weight = float(item.get("weight"))
-                        new_prod = PhysicalProduct(p_id, name, price, stock, weight)
+                        new_prod = physicalProduct(p_id, name, price, stock, weight)
                     elif prod_type == "digital":
                         download_size = float(item.get("download_size"))
-                        new_prod = DigitalProduct(p_id, name, price, stock, download_size)
+                        new_prod = digitalProduct(p_id, name, price, stock, download_size)
                     else:
                         continue
                     inv.add_products(new_prod)
@@ -157,9 +157,9 @@ def load_inventory(filename=FILENAME):
             pass         
          
     # Default initial inventory using concrete subclasses
-    inv.add_products(PhysicalProduct("P1001", "Laptop", 1200.00, 15, 2.5))
-    inv.add_products(PhysicalProduct("P002", "Mouse", 25.50, 40, 0.2))
-    inv.add_products(DigitalProduct("D001", "Antivirus Software", 49.99, 100, 250.0))
+    inv.add_products(physicalProduct("P1001", "Laptop", 1200.00, 15, 2.5))
+    inv.add_products(physicalProduct("P002", "Mouse", 25.50, 40, 0.2))
+    inv.add_products(digitalProduct("D001", "Antivirus Software", 49.99, 100, 250.0))
     return inv   
    
 def save_inventory(inventory, filename=FILENAME):
@@ -205,7 +205,7 @@ while True:
                 print("Error: Invalid numeric input format.")
                 continue
                 
-            digital_product = DigitalProduct(p_id, name, price, stock, download_size)
+            digital_product = digitalProduct(p_id, name, price, stock, download_size)
             inventory.add_products(digital_product)
             print("\nDigital Product added successfully!")
             
@@ -220,7 +220,7 @@ while True:
                 print("Error: Invalid numeric input format.")
                 continue
                 
-            physical_product = PhysicalProduct(p_id, name, price, stock, weight)
+            physical_product = physicalProduct(p_id, name, price, stock, weight)
             inventory.add_products(physical_product)  
             print("\nPhysical Product added successfully!")
         else:

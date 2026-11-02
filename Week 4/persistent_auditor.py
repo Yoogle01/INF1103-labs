@@ -60,6 +60,7 @@ while True:
 
     if product_name.lower() == "quit":
        
+        save_orders(orders)
         
         total_quantity = sum(order["quantity"] for order in orders)
         total_transactions = len(orders)

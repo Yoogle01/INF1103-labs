@@ -1,101 +1,10 @@
 import json
 import os
-from abc import ABC, abstractmethod
+from CanBeShipped import CanBeShipped
+from physicalProduct import physicalProduct
+from digitalProduct import digitalProduct
 FILENAME = "inventory.json"
 
-class CanBeShipped(ABC):
-    @abstractmethod
-    def calculate_shipping_cost(self):
-        pass
-    
-class Product(ABC):
-    def __init__(self, product_id, name,price, stock ):
-        self.__product_id = product_id
-        self.__name = name
-        self.__price = price
-        self.__stock = stock
-        
-    #get methods
-    def get_product_id(self):
-        return self.__product_id
-    
-    def get_name(self):
-        return self.__name
-    
-    def get_price(self):
-        return self.__price
-            
-    def get_stock(self):
-        return self.__stock 
-        
-    #update stock        
-    def update_stock(self, new_stock):
-        self.__stock = new_stock
-    
-    @abstractmethod    
-    def to_dict(self):
-        pass  
-        
-    @abstractmethod
-    def get_fulfilment_info(self):
-        pass
-        
-    def display_information(self):
-        return  f"Product_id: {self.__product_id} | Name: {self.__name} | Price: {self.__price} | Stock: {self.__stock}"
-            
-    def __str__ (self):
-        return self.display_information()
-
-class physicalProduct(Product, CanBeShipped):
-    def __init__(self, product_id, name, price, stock, weight):
-        super().__init__(product_id, name, price, stock)
-        self.weight = weight
-        
-    def get_fulfilment_info(self):
-        return f"Product requires physical shipping"  
-    
-    def calculate_shipping_cost(self):
-        base_fee = 5.00
-        cost_per_kg = 2.00
-        return base_fee + (self.weight * cost_per_kg)
-        
-    def to_dict(self):
-        return {
-            "type": "physical",
-            "product_id": self.get_product_id(),
-            "name": self.get_name(),
-            "price": self.get_price(),
-            "stock": self.get_stock(),
-            "weight": self.weight
-        }    
-        
-    def display_information(self):
-        product_info = super().display_information()
-        return  f"{product_info} | weight: {self.weight}"
-        
-class digitalProduct(Product):
-    def __init__(self, product_id, name, price, stock, download_size):
-        super().__init__(product_id, name, price, stock)
-        self.download_size = download_size
-    
-    def get_fulfilment_info(self):
-        return f"Product is delivered digitally"    
-    
-    def to_dict(self):
-        return {
-            "type": "digital",
-            "product_id": self.get_product_id(),
-            "name": self.get_name(),
-            "price": self.get_price(),
-            "stock": self.get_stock(),
-            "download_size": self.download_size
-        }
-        
-    def display_information(self):
-        product_info = super().display_information()
-        return  f"{product_info} | Download size: {self.download_size}"    
-
-    
 class Inventory:
     def __init__(self):
         self.__items = [] 

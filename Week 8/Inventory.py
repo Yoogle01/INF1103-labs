@@ -3,20 +3,21 @@ import os
 from CanBeShipped import CanBeShipped
 from physicalProduct import physicalProduct
 from digitalProduct import digitalProduct
+from Product import Product
 
 FILENAME = "inventory.json"
 
 class Inventory:
     def __init__(self):
-        self.__items = [] 
+        self.__items: list[Product] = [] 
         
     def get_items(self):
         return self.__items
         
-    def add_products(self, product):
+    def add_products(self, product: Product) -> None:
         self.__items.append(product)      
         
-    def search_product(self, product_id):
+    def search_product(self, product_id: str) -> Product | None:
         for item in self.__items:
             if item.get_product_id().lower() == product_id.lower():
                 return item

@@ -1,10 +1,12 @@
 from Product import Product
 from CanBeShipped import CanBeShipped
+from Supplier import Supplier
 
-class physicalProduct(Product, CanBeShipped):
-    def __init__(self, product_id, name, price, stock, weight):
-        super().__init__(product_id, name, price, stock)
+class physicalProduct(Product, CanBeShipped, Supplier):
+    def __init__(self, product_id, name, price, stock, weight, supplier: Supplier):
+        super().__init__(product_id, name, price, stock, supplier)
         self.weight = weight
+        
         
     def get_fulfilment_info(self):
         return f"Product requires physical shipping"  

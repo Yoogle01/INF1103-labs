@@ -5,4 +5,4 @@ class orderLine:
         self.quantity = quantity
         
     def calculate_subtotal(self) -> float:
-        return self.product.__price * self.quantity  
+        return self.product.get_price * self.quantity  

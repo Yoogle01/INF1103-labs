@@ -10,6 +10,4 @@ class Order:
         self.order_lines.append(order_line)    
         
     def calculate_total(self) -> float:
-        for line in self.order_lines:
-            total = sum(line.calculate_subtotal())
-            return total
+        return sum(line.calculate_subtotal() for line in self.order_lines)

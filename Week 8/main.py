@@ -36,13 +36,11 @@ while True:
         p_id = input("Product ID: ").strip()  
         name = input("Name: ").strip()
         
-        # --- Prompt for Supplier Details ---
         print("\n--- Enter Supplier Details ---")
         supp_id = input("Supplier ID: ").strip()
         supp_name = input("Supplier Name: ").strip()
         supp_email = input("Supplier Email: ").strip()
         
-        # Create the Supplier object from user input
         user_supplier = Supplier(supp_id, supp_name, supp_email)
         print("------------------------------")
         
@@ -55,7 +53,6 @@ while True:
                 print("Error: Invalid numeric input format.")
                 continue
                 
-            # Pass the user_supplier as the final argument
             digital_product = digitalProduct(p_id, name, price, stock, download_size, user_supplier)
             inventory.add_products(digital_product)
             print("\nDigital Product added successfully!")
@@ -69,7 +66,6 @@ while True:
                 print("Error: Invalid numeric input format.")
                 continue
                 
-            # Pass the user_supplier as the final argument
             physical_product = physicalProduct(p_id, name, price, stock, weight, user_supplier)
             inventory.add_products(physical_product)  
             print("\nPhysical Product added successfully!")

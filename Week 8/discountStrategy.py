@@ -18,4 +18,8 @@ class BulkPercentage(DiscountStrategy):
     def apply(self, total:float) -> float:
         return total - 20 if total >= 200 else total
     
+class StudentDiscount(DiscountStrategy):
+    def apply(self, total:  float) -> float:
+        return total * 0.10
+    
     

@@ -1,8 +1,7 @@
 from Inventory import load_inventory, save_inventory
 from CanBeShipped import CanBeShipped
-from physicalProduct import physicalProduct
-from digitalProduct import digitalProduct
 from Supplier import Supplier
+from ProductFactory import ProductFactory
 
 print("=" * 46)
 print("Inventory Management System")
@@ -44,31 +43,32 @@ while True:
         user_supplier = Supplier(supp_id, supp_name, supp_email)
         print("------------------------------")
         
-        if digiOrPhy == "digital":
-            try:
-                price = float(input("Price: "))
-                stock = int(input("Stock: "))
-                download_size = float(input("Download size (MB): "))
-            except ValueError:
-                print("Error: Invalid numeric input format.")
-                continue
-                
-            digital_product = digitalProduct(p_id, name, price, stock, download_size, user_supplier)
-            inventory.add_products(digital_product)
-            print("\nDigital Product added successfully!")
+        try:
+            price = float(input("Price: "))
+            stock = int(input("Stock: "))
             
-        elif digiOrPhy == "physical":
-            try:
-                price = float(input("Price: "))
-                stock = int(input("Stock: "))
+            if digiOrPhy == "digital":
+                download_size = float(input("Download size (MB): "))
+                weight = 0
+            else:
                 weight = float(input("Weight (kg): "))
-            except ValueError:
-                print("Error: Invalid numeric input format.")
-                continue
-                
-            physical_product = physicalProduct(p_id, name, price, stock, weight, user_supplier)
-            inventory.add_products(physical_product)  
-            print("\nPhysical Product added successfully!")
+                download_size = 0
+
+            product = ProductFactory.create(
+                digiOrPhy,
+                p_id,
+                name,
+                price,
+                stock,
+                weight,
+                download_size,
+                user_supplier,
+            )
+        except ValueError as e:
+            print(f"Error: {e}")
+            continue
+        inventory.add_products(product)  
+        print("\nPhysical Product added successfully!")
           
     elif choice == "3":
         p_id = input("Product ID: ").strip()

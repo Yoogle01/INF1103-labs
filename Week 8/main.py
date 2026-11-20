@@ -9,6 +9,17 @@ print("=" * 46)
 
 inventory = load_inventory()
 
+def get_positive_float(prompt: str) -> float:
+    while True:
+        try:
+            value = float(input(prompt))
+            if value <= 0:
+                print("Please enter a number greater than zero.")
+                continue
+            return value
+        except ValueError:
+            print("Please enter a valid number, e.g. 12.50")
+
 while True:
     print("\n--------- MENU ---------")
     print("1. Display All Products")
@@ -44,7 +55,7 @@ while True:
         print("------------------------------")
         
         try:
-            price = float(input("Price: "))
+            price = get_positive_float("Price: ")
             stock = int(input("Stock: "))
             
             if digiOrPhy == "digital":

@@ -10,12 +10,12 @@ class NoDiscount(DiscountStrategy):
         return total
     
 class PercentageDiscount(DiscountStrategy):
-    def apply(self, percent: float) -> float:
-        return percent
+    def apply(self, total) -> float:
+        total = total * 0.9
+        return total
     
 class BulkPercentage(DiscountStrategy):
-    def apply(self, total:float, percent: float) -> float:
-        threshold = total * percent
-        return threshold
+    def apply(self, total:float) -> float:
+        return total - 20 if total >= 200 else total
     
     

@@ -14,4 +14,3 @@ class ProductFactory:
             return digitalProduct(product_id, name, price, stock_quantity, download_size, supplier)
         else:
             raise ValueError(f"Unknown product type: {product_type}")
-        

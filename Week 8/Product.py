@@ -3,6 +3,17 @@ from Supplier import Supplier
 
 class Product(ABC):
     def __init__(self, product_id: str, name: str ,price: float, stock: int, supplier: Supplier ):
+        if not product_id or not str(product_id).strip():
+            raise ValueError("Product ID cannot be empty.")
+        if not name or not str(name).strip():
+            raise ValueError("Product name cannot be empty.")
+        if price <= 0:
+            raise ValueError("Price must be greater than zero.")
+        if stock < 0:
+            raise ValueError("Stock quantity cannot be negative.")
+        if supplier is None:
+            raise ValueError("Supplier cannot be None.")
+        
         self.__product_id = product_id
         self.__name = name
         self.__price = price

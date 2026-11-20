@@ -1,9 +1,13 @@
 from OrderLine import orderLine
 from Product import Product
-from discountStrategy import DiscountStrategy
+from discountStrategy import DiscountStrategy, NoDiscount
 
 class Order:
     def __init__(self, order_id: str):
+        if not order_id or not str(order_id).strip():
+            raise ValueError("Order ID cannot be empty.")
+        if discount is None:
+            discount = NoDiscount()
         self.order_id = order_id
         self.order_lines: list[orderLine] = []
         self.discount = DiscountStrategy
@@ -16,5 +20,5 @@ class Order:
         total =  sum(line.calculate_subtotal() for line in self.order_lines)
         return self.discount.apply(total)
 
-    def set_discount():
-        pass
+    def set_discount(self, discount:DiscountStrategy) -> None:
+        self.discount = discount

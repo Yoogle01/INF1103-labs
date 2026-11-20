@@ -5,6 +5,8 @@ from Supplier import Supplier
 class physicalProduct(Product, CanBeShipped):
     def __init__(self, product_id, name, price, stock, weight, supplier: Supplier):
         super().__init__(product_id, name, price, stock, supplier)
+        if weight <= 0:
+            raise ValueError("Weight must be greater than zero.")
         self.weight = weight
         
         

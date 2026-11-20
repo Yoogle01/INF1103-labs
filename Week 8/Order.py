@@ -15,6 +15,6 @@ class Order:
     def calculate_total(self) -> float:
         total =  sum(line.calculate_subtotal() for line in self.order_lines)
         return self.discount.apply(total)
-    
+
     def set_discount():
         pass
